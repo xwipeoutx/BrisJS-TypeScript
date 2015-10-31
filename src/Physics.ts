@@ -34,7 +34,7 @@ export interface Body {
 export class PhysicsBuilder {
 	private steps : PhysicsStep[] = []
 	
-	constructor() {		
+	constructor(private stepSize : number) {		
 	}	
 	
 	public inertia(body : Body) : PhysicsBuilder {
@@ -48,12 +48,23 @@ export class PhysicsBuilder {
 	}
 	
 	public build() : PhysicsStep {
-		return new CompositeStep(this.steps.slice());
+		return new GranularizingStep(new CompositeStep(this.steps.slice()), this.stepSize);
 	}
 }
 
 export interface PhysicsStep {
 	update(dt : number) : void
+}
+
+class GranularizingStep implements PhysicsStep {
+	constructor(private step : PhysicsStep, private stepSize : number) {		
+	}
+	
+	update(dt : number) : void {
+		do {
+			this.step.update(Math.min(this.stepSize, dt));			
+		} while ((dt = dt - this.stepSize) > 0)
+	}
 }
 
 class CompositeStep implements PhysicsStep {

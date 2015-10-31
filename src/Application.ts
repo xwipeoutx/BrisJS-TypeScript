@@ -7,6 +7,8 @@ import { CelestialBody, Star, Planet } from "Space"
 class Application {
 	private bodies: CelestialBody[] = [];
 
+	private static stepSize = 60 * 60; // 1hr
+
 	start() {
 		var sun = new Star("Sun", new Point(0, 0), 10e9, 1.989e30);
 		var mercury = new Planet("Mercury", "orange", new Point(57.91e9, 0), new Vector(0, 47400), 2.4e9, 3.285e23);
@@ -16,7 +18,7 @@ class Application {
 
 		this.bodies.push(sun, mercury, venus, earth, mars);
 		
-		var physics = new PhysicsBuilder()
+		var physics = new PhysicsBuilder(Application.stepSize)
 			.inertia(mercury)
 			.inertia(venus)
 			.inertia(earth)
