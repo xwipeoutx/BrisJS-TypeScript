@@ -2,7 +2,17 @@
 
 import * as d3 from "d3";
 
+interface Body {
+	name: string,
+	x: number,
+	y: number,
+	radius: number,
+	color: string
+}
+
 class Application {
+	private bodies : Body[] = [];
+	
 	start() {
 		var sun = {
 			name: "Sol",
@@ -36,11 +46,14 @@ class Application {
 			color: "blue"
 		}
 
-		var bodies = [sun, mercury, venus, earth];
+		this.bodies.push(sun, mercury, venus, earth);
+		this.draw();
+	}
 
+	draw() {
 		var circles = d3.select('svg')
 			.selectAll('circle')
-			.data(bodies, body => body.name);
+			.data(this.bodies, body => body.name);
 
 		circles.enter()
 			.append('circle')
