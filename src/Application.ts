@@ -1,7 +1,7 @@
 /// <reference path="../typings/d3/d3.d.ts" />
 
 import * as d3 from "d3";
-import { Body, Point, Vector } from "Physics"
+import { PhysicsBuilder, Body, Point, Vector } from "Physics"
 import { CelestialBody, Star, Planet } from "Space"
 
 class Application {
@@ -15,10 +15,20 @@ class Application {
 		var mars = new Planet("Mars", "red", new Point(-227e9, 0), new Vector(0, -24100), 3.4e9, 639e21);
 
 		this.bodies.push(sun, mercury, venus, earth, mars);
-		this.draw();
+		
+		var physics = new PhysicsBuilder()
+			.inertia(mercury)
+			.inertia(venus)
+			.inertia(earth)
+			.inertia(mars)
+			.build();
+		
+		setInterval(() => physics.update(60 * 60 * 24 * 5), 20);
+		
+		this.drawLoop();
 	}
 
-	draw() {
+	drawLoop() {
 		var circles = d3.select('svg')
 			.selectAll('circle')
 			.data(this.bodies, body => body.name);
@@ -33,6 +43,8 @@ class Application {
 		circles
 			.attr('cx', body => body.position.x / 1e9)
 			.attr('cy', body => body.position.y / 1e9);
+			
+		requestAnimationFrame(() => this.drawLoop());
 	}
 }
 
