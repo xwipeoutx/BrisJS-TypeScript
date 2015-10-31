@@ -5,9 +5,6 @@ import { PhysicsBuilder, PhysicsStep, Body, Point, Vector } from "Physics"
 import { CelestialBody, Star, Planet } from "Space"
 
 class Application {
-	private bodies: CelestialBody[] = [];
-	private startTime: number;
-
 	run() {
 		var sun = new Star("Sun", new Point(0, 0), 10e9, 1.989e30);
 		var mercury = new Planet("Mercury", "orange", new Point(57.91e9, 0), new Vector(0, 47400), 2.4e9, 3.285e23);
@@ -15,7 +12,16 @@ class Application {
 		var earth = new Planet("Earth", "blue", new Point(0, -149.6e9), new Vector(30000, 0), 7e9, 5.972e24);
 		var mars = new Planet("Mars", "red", new Point(-227e9, 0), new Vector(0, -24100), 3.4e9, 639e21);
 
-		var bodies = [sun, mercury, venus, earth, mars];
+		var comet = {
+			name: "SOHO",
+			color: "green",
+			position: new Point(-400e9, 200e9),
+			velocity: new Vector(-4000, 8000),
+			mass: 1,
+			radius: 2e9
+		};
+		
+		var bodies : CelestialBody[] = [sun, mercury, venus, earth, mars, comet];
 
 		var physics = new PhysicsBuilder()
 			.clampTo(60 * 60)
@@ -24,10 +30,12 @@ class Application {
 			.inertia(venus)
 			.inertia(earth)
 			.inertia(mars)
+			.inertia(comet)
 			.gravity(sun, mercury)
 			.gravity(sun, venus)
 			.gravity(sun, earth)
 			.gravity(sun, mars)
+			.gravity(sun, comet)
 			.build();
 
 		var game = new Game(physics, bodies);
