@@ -1,52 +1,20 @@
 /// <reference path="../typings/d3/d3.d.ts" />
 
 import * as d3 from "d3";
-
-interface Body {
-	name: string,
-	x: number,
-	y: number,
-	radius: number,
-	color: string
-}
+import { Body, Point } from "Physics"
+import { CelestialBody, Star, Planet } from "Space"
 
 class Application {
-	private bodies : Body[] = [];
-	
+	private bodies: CelestialBody[] = [];
+
 	start() {
-		var sun = {
-			name: "Sol",
-			x: 0,
-			y: 0,
-			radius: 10,
-			color: "white"
-		};
+		var sun = new Star("Sun", new Point(0, 0), 10e9, 1.989e30);
+		var mercury = new Planet("Mercury", "orange", new Point(57.91e9, 0), 2.4e9, 3.285e23);
+		var venus = new Planet("Venus", "purple", new Point(0, 108.2e9), 6e9, 4.867e24);
+		var earth = new Planet("Earth", "blue", new Point(0, -149.6e9), 7e9, 5.972e24);
+		var mars = new Planet("Mars", "red", new Point(-227e9, 0), 3.4e9, 639e21);
 
-		var mercury = {
-			name: "Mercury",
-			x: 50,
-			y: 0,
-			radius: 3,
-			color: "orange"
-		};
-
-		var venus = {
-			name: "Venus",
-			x: 0,
-			y: 80,
-			radius: 5,
-			color: "purple"
-		};
-
-		var earth = {
-			name: "Earth",
-			x: 0,
-			y: -120,
-			radius: 6,
-			color: "blue"
-		}
-
-		this.bodies.push(sun, mercury, venus, earth);
+		this.bodies.push(sun, mercury, venus, earth, mars);
 		this.draw();
 	}
 
@@ -57,14 +25,14 @@ class Application {
 
 		circles.enter()
 			.append('circle')
-			.attr('r', body => body.radius)
+			.attr('r', body => body.radius / 1e9)
 			.style("fill", body => body.color);
 
 		circles.exit().remove();
 
 		circles
-			.attr('cx', body => body.x)
-			.attr('cy', body => body.y);
+			.attr('cx', body => body.position.x / 1e9)
+			.attr('cy', body => body.position.y / 1e9);
 	}
 }
 
