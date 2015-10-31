@@ -11,5 +11,5 @@ require.config({
 
 require(['Application'], function(Application : any) {
 	var app = new Application();
-	app.start();
+	app.run();
 });
