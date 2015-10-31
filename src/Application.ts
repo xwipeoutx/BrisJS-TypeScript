@@ -21,6 +21,10 @@ class Application {
 			.inertia(venus)
 			.inertia(earth)
 			.inertia(mars)
+			.gravity(sun, mercury)
+			.gravity(sun, venus)
+			.gravity(sun, earth)
+			.gravity(sun, mars)
 			.build();
 		
 		setInterval(() => physics.update(60 * 60 * 24 * 5), 20);
