@@ -2,12 +2,15 @@
   "name": "Typescript_SignIn",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app,js",
+  "main": "server.js",
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-typescript": "^2.9.2",
     "main-bower-files": "^2.9.0"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
   }
 }
